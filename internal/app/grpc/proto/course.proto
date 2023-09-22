@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package course;
+option go_package = "github.com/moswil/course-management/internal/app/grpc/service";
+
+message CreateCourseRequest {
+  string title = 1;
+  string instructor = 2;
+}
+
+message CreateCourseResponse {
+  string course_id = 1;
+  string title = 2;
+  string instructor = 3;
+}
+
+message GetCourseRequest { string course_id = 1; }
+
+message GetCourseResponse {
+  string course_id = 1;
+  string title = 2;
+  string instructor = 3;
+}
+
+service CourseService {
+  rpc CreateCourse(CreateCourseRequest) returns (CreateCourseResponse);
+  rpc GetCourse(GetCourseRequest) returns (GetCourseResponse);
+}
