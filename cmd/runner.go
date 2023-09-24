@@ -27,10 +27,13 @@ func main() {
 	}
 
 	//  broker (kafka)
-	eventBroker := messaging.NewKafkaEventPublisher()
+	// eventBroker := messaging.NewKafkaEventPublisher()
+
+	eventBrokerProtobuf := messaging.NewKafkaProtobufEventPublisher()
 
 	// course service
-	courseService := service.NewCourseService(courseRepository, eventBroker)
+	// courseService := service.NewCourseService(courseRepository, eventBroker)
+	courseService := service.NewCourseService(courseRepository, eventBrokerProtobuf)
 
 	// Start gRPC Server as a goroutine
 	go func() {

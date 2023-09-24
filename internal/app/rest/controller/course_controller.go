@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -32,9 +33,10 @@ func (c *CourseController) CreateCourse(ctx *gin.Context) {
 	createDTO := createRequest.Course
 
 	course, err := c.courseService.CreateCourse(ctx, &createDTO)
+	log.Printf("error: %v", err)
 	// Call the service to create the course
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create course"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create course", "message": err.Error()})
 		return
 	}
 

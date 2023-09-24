@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/moswil/course-management/internal/core/domain/event"
+	"github.com/moswil/course-management/internal/core/domain/event/pb"
 	"github.com/moswil/course-management/internal/core/dto"
 	eventer "github.com/moswil/course-management/internal/core/interface/event"
 	"github.com/moswil/course-management/internal/core/interface/repository"
@@ -45,9 +45,17 @@ func (s *CourseService) CreateCourse(ctx context.Context, createDTO *dto.CreateC
 		return nil, err
 	}
 
-	// Publish a course creation event
-	createCourseEvent := event.CourseCreatedEvent{
-		CourseID:   course.CourseID,
+	// // Publish a course creation event
+	// createCourseEvent := event.CourseCreatedEvent{
+	// 	CourseID:   course.CourseID,
+	// 	Title:      course.Title,
+	// 	Instructor: course.Instructor,
+	// 	// Set other event fields as needed
+	// }
+
+	// Publish protobuf event
+	createCourseEvent := &pb.CourseCreatedEvent{
+		CourseId:   course.CourseID,
 		Title:      course.Title,
 		Instructor: course.Instructor,
 		// Set other event fields as needed

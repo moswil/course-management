@@ -15,6 +15,7 @@
 	"author": "Moses Ongwenyi",
 	"license": "MIT",
 	"dependencies": {
-		"kafkajs": "^2.2.4"
+		"kafkajs": "^2.2.4",
+		"protobufjs": "^7.2.5"
 	}
 }
