@@ -9,7 +9,9 @@ import (
 	rest "github.com/moswil/course-management/internal/app/rest/server"
 	repo "github.com/moswil/course-management/internal/core/interface/repository"
 	"github.com/moswil/course-management/internal/core/service"
-	"github.com/moswil/course-management/internal/infra/repository"
+	"github.com/moswil/course-management/internal/infra/messaging"
+	"github.com/moswil/course-management/internal/infra/repository/sql/dao"
+	"github.com/moswil/course-management/internal/infra/repository/sql/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,11 +19,18 @@ import (
 
 func main() {
 	// Initialize repositories, services, and servers
+
+	// repository
 	courseRepository, err := initializeMySQLRepository()
 	if err != nil {
 		log.Printf("error: %v occurred connecting to db", err)
 	}
-	courseService := service.NewCourseService(courseRepository)
+
+	//  broker (kafka)
+	eventBroker := messaging.NewKafkaEventPublisher()
+
+	// course service
+	courseService := service.NewCourseService(courseRepository, eventBroker)
 
 	// Start gRPC Server as a goroutine
 	go func() {
@@ -55,12 +64,12 @@ func initializeMySQLRepository() (repo.CourseRepository, error) {
 	}
 
 	// Auto-migrate the Course model
-	if err := db.AutoMigrate(&repository.CourseModel{}); err != nil {
+	if err := db.AutoMigrate(&model.CourseModel{}); err != nil {
 		return nil, err
 	}
 
 	// Initialize the GORM repository
-	courseRepository := repository.NewMySQLCourseRepository(db)
+	courseRepository := dao.NewMySQLCourseRepository(db)
 
 	return courseRepository, nil
 }

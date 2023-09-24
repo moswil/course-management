@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 
+	"github.com/moswil/course-management/internal/core/domain/event"
 	"github.com/moswil/course-management/internal/core/dto"
+	eventer "github.com/moswil/course-management/internal/core/interface/event"
 	"github.com/moswil/course-management/internal/core/interface/repository"
 	"github.com/moswil/course-management/internal/core/interface/service"
 )
@@ -12,12 +14,14 @@ import (
 type CourseService struct {
 	// You can inject any dependencies or repositories needed here.
 	courseRepository repository.CourseRepository
+	eventPublisher   eventer.EventPublisher
 }
 
 // NewCourseServicer creates a new CourseService instance.
-func NewCourseService(courseRepository repository.CourseRepository) service.CourseService {
+func NewCourseService(courseRepository repository.CourseRepository, eventPublisher eventer.EventPublisher) service.CourseService {
 	return &CourseService{
 		courseRepository: courseRepository,
+		eventPublisher:   eventPublisher,
 	}
 }
 
@@ -40,5 +44,19 @@ func (s *CourseService) CreateCourse(ctx context.Context, createDTO *dto.CreateC
 		// do some extra logic
 		return nil, err
 	}
+
+	// Publish a course creation event
+	createCourseEvent := event.CourseCreatedEvent{
+		CourseID:   course.CourseID,
+		Title:      course.Title,
+		Instructor: course.Instructor,
+		// Set other event fields as needed
+	}
+
+	if err := s.eventPublisher.Publish(ctx, createCourseEvent); err != nil {
+		// Handle the event publishing error
+		return nil, err
+	}
+
 	return course, err
 }

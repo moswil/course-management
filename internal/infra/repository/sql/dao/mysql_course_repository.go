@@ -1,12 +1,13 @@
-package repository
+package dao
 
 import (
 	"context"
 	"log"
 
+	"github.com/moswil/course-management/internal/core/domain/entity"
 	"github.com/moswil/course-management/internal/core/dto"
 	"github.com/moswil/course-management/internal/core/interface/repository"
-	"github.com/moswil/course-management/internal/core/model"
+	"github.com/moswil/course-management/internal/infra/repository/sql/model"
 
 	"gorm.io/gorm"
 )
@@ -25,11 +26,11 @@ func NewMySQLCourseRepository(db *gorm.DB) repository.CourseRepository {
 // Create inserts a new course into the MySQL database using CreateCourseDTO.
 func (r *MySQLCourseRepository) CreateCourse(ctx context.Context, createDTO *dto.CreateCourseDTO) (*dto.CourseDTO, error) {
 	// Create a new Course model based on the CreateCourseDTO.
-	course := model.NewCourse(createDTO.Title, createDTO.Instructor)
+	course := entity.NewCourse(createDTO.Title, createDTO.Instructor)
 
 	log.Printf("course: %v: %v: %v\n", course.GetCourseID(), course.GetTitle(), course.GetInstructor())
 
-	courseModel := &CourseModel{}
+	courseModel := &model.CourseModel{}
 	courseModel.FromEntity(course)
 
 	// Insert the course into MySQL.
@@ -43,7 +44,7 @@ func (r *MySQLCourseRepository) CreateCourse(ctx context.Context, createDTO *dto
 
 func (r *MySQLCourseRepository) GetCourseByID(ctx context.Context, courseID string) (*dto.CourseDTO, error) {
 	// Create an empty Course model to hold the retrieved data.
-	courseModel := &CourseModel{}
+	courseModel := &model.CourseModel{}
 
 	if err := r.db.WithContext(ctx).Where("course_id = ?", courseID).First(&courseModel).Error; err != nil {
 		// log the error

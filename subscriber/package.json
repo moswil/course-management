@@ -1,0 +1,20 @@
+{
+	"name": "course-management-subscriber",
+	"version": "0.0.1",
+	"description": "Subscribes to events created by course management service (for demo purposes only)",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"kafka",
+		"subscriber",
+		"course management",
+		"messaging"
+	],
+	"author": "Moses Ongwenyi",
+	"license": "MIT",
+	"dependencies": {
+		"kafkajs": "^2.2.4"
+	}
+}
