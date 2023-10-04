@@ -1,0 +1,18 @@
+app:
+  version: 0.0.1
+  environment: development
+database:
+  mysql:
+    dsn: codeguru:CodeGuru96@tcp(localhost:3306)/courses
+messaging:
+  kafka:
+    brokers:
+      - 'localhost:9092'
+    topic: 'course-events'
+oauth:
+  issuer: 'http://dev.keycloak.shirwil.com:8180/realms/demo-realm'
+  client_id: demo-client
+tracing:
+  service_name: course-service
+  exporter_url: localhost:4317
+  secure_mode: false
