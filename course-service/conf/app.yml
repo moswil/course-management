@@ -12,7 +12,7 @@ messaging:
 oauth:
   issuer: 'http://dev.keycloak.shirwil.com:8180/realms/demo-realm'
   client_id: demo-client
-tracing:
+telemetry:
   service_name: course-service
   exporter_url: localhost:4317
   secure_mode: false

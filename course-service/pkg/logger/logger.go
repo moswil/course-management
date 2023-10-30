@@ -22,19 +22,3 @@ func init() {
 		panic(err)
 	}
 }
-
-func Info(message string, fields ...zap.Field) {
-	Log.Info(message, fields...)
-}
-
-func Debug(message string, fields ...zap.Field) {
-	Log.Debug(message, fields...)
-}
-
-func Warn(message string, fields ...zap.Field) {
-	Log.Warn(message, fields...)
-}
-
-func Error(message string, fields ...zap.Field) {
-	Log.Error(message, fields...)
-}

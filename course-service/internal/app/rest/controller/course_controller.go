@@ -12,6 +12,8 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
+var log = otelzap.L()
+
 // CourseController handles HTTP requests related to courses.
 type CourseController struct {
 	courseService service.CourseService
@@ -30,7 +32,6 @@ func NewCourseController(courseService service.CourseService, tracer trace.Trace
 func (c *CourseController) CreateCourse(ctx *gin.Context) {
 	// add telemetry
 	_ctx := ctx.Request.Context()
-	log := otelzap.L()
 
 	// Start a custom span for the "CreateCourse" operation
 	_ctx, span := c.tracer.Start(_ctx, "create course endpoint")
@@ -64,7 +65,7 @@ func (c *CourseController) CreateCourse(ctx *gin.Context) {
 func (c *CourseController) GetCourse(ctx *gin.Context) {
 	// add telemetry
 	_ctx := ctx.Request.Context()
-	log := otelzap.L()
+	// log := otelzap.L()
 
 	// Start a custom span for the "GetCourse" operation
 	_ctx, span := c.tracer.Start(_ctx, "get course endpoint")

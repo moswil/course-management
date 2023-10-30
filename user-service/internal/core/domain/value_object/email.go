@@ -1,5 +1,7 @@
 package value_object
 
+import "regexp"
+
 // Email validates an email
 type Email struct {
 	email string
@@ -12,7 +14,8 @@ func NewEmail(email string) *Email {
 	}
 }
 
-// ValidateEmail checks if the passed email is valid
-func ValidateEmail(email string) bool {
-	return true
+// IsEmailValid returns true if the email passwed is valid, otherwise returns false.
+func IsEmailValid(email string) bool {
+	emailRegex := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+	return emailRegex.MatchString(email)
 }

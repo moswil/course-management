@@ -6,7 +6,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/moswil/course-management/pkg/logger"
+	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
@@ -28,6 +28,8 @@ func NewProvider(ctx context.Context, serviceName, exporterURL, appVersion, envi
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
+	log := otelzap.L()
+
 	// setup exporter
 	// we create an OTLP exporter with a tracing backend endpoint
 	secureOption := otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, ""))
@@ -41,7 +43,7 @@ func NewProvider(ctx context.Context, serviceName, exporterURL, appVersion, envi
 		secureOption,
 	))
 	if err != nil {
-		logger.Error("error creating exporter: " + err.Error())
+		log.ErrorContext(ctx, "error creating exporter: "+err.Error())
 		return nil, err
 	}
 
